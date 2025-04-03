@@ -5,7 +5,7 @@
 #include "SDL_image.h"
 #include <SDL_syswm.h>
 #include <Windows.h>
-#include "vector2.h"
+#include "vector2.cpp"
 #include <iomanip>
 #include <unordered_set>
 #include <omp.h>
@@ -55,7 +55,7 @@ int main(int argc, char** args)
 
 	omp_set_num_threads(8);
 	simulation sim;
-	sim.init(2000000, 1, 8, -SCREEN_WIDTH/2, -SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	sim.init(20'000, 1, 8, -SCREEN_WIDTH/2, -SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	SDL_Point* points = new SDL_Point[sim.activeParticles.size()];	
 	float deltaTime = 0.01;
 	while (run)

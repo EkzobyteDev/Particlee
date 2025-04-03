@@ -16,6 +16,9 @@
     <Filter Include="Assets">
       <UniqueIdentifier>{685a88e6-fbc8-479e-8305-bfd706b9dc45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{eca2ed91-3810-41c7-b10f-01f012036937}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />
@@ -30,9 +33,6 @@
     <ClCompile Include="simulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vector2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simulation.h">
@@ -41,8 +41,8 @@
     <ClInclude Include="particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vector2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vector2.cpp">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

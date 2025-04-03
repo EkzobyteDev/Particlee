@@ -1,6 +1,6 @@
 #include <iostream>
 #include "simulation.h"
-#include "vector2.h"
+#include "vector2.cpp"
 #include "math.h"
 #include <omp.h>
 
@@ -10,11 +10,8 @@ void simulation::init(int particlesCount, int particleSize, int quadSize, int x0
 {
 	srand(time(0));
 
-	//int quadsCount = (lu-rd).x / quadSize * (lu-rd).y / quadSize;
-
 	particles = std::vector<particle>(particlesCount);
 	activeParticles = std::vector<particle*>(particlesCount);
-	//grid = new std::vector<particle*>[quadsCount];
 
 	for (int i = 0; i < particlesCount; i++)
 	{
@@ -35,14 +32,10 @@ void simulation::simulateFrame(float deltaTime, float time)
 			startCoords->push_back(particle->coords);
 		}
 	}
-	float r = 500; // 190 ms average without omp
+	float r = 500;
 	#pragma	omp parallel for
 	for (int i = 0; i < activeParticles.size(); i++)
 	{
-		//activeParticles[i]->coords.x *= -1;
-		//activeParticles[i]->coords.y *= -1;
-
-	    activeParticles[i]->coords.x = (*startCoords)[i].x + r * sin(i+time/4);
-		activeParticles[i]->coords.y = (*startCoords)[i].y + r * sin(i+time/4);
+		activeParticles[i]->coords = (*startCoords)[i] + vector2::one() * (r * sin(i+time/4));
 	}
 }
