@@ -33,6 +33,12 @@
     <ClCompile Include="simulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="quadTree.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="aabb.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simulation.h">

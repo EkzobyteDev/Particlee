@@ -11,6 +11,7 @@
 #include <omp.h>
 #include "simulation.h"
 #include <chrono>
+#include "quadTree.cpp"
 
 const int SCREEN_WIDTH  = 1920;
 const int SCREEN_HEIGHT = 1080;
@@ -51,8 +52,47 @@ int main(int argc, char** args)
 	bool run = true;
 	SDL_Event e;
 
+	srand(time(0));
 	int cellPixelSize = 1;
 
+	aabb ab(0, 0, 1920, 1920);
+	quadTree qt(ab, 8, 8);
+	while (run)
+	{
+        while(SDL_PollEvent(&e) != 0)
+		{
+            if (e.type == SDL_QUIT)
+			{
+                run = false;
+            }
+			if (e.type == SDL_MOUSEMOTION)
+			{
+				int mouseX, mouseY;
+				SDL_GetGlobalMouseState(&mouseX, &mouseY);
+				vector2 v(mouseX, mouseY);
+
+				quadTree* searchResult = qt.find(v);
+				if (searchResult == nullptr) continue;
+
+				SDL_Rect rect;
+				rect.x = searchResult->boundingArea.pos.x;
+				rect.y = searchResult->boundingArea.pos.y;
+				rect.w = searchResult->boundingArea.size.x;
+				rect.h = searchResult->boundingArea.size.y;
+				
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+				//SDL_RenderClear(renderer);
+				SDL_SetRenderDrawColor(renderer, rand()%256, rand()%256, rand()%256, 255);
+				SDL_RenderDrawRect(renderer, &rect);
+				SDL_RenderPresent(renderer);
+			}
+        }
+
+
+	}
+
+
+	return 0;
 	omp_set_num_threads(8);
 	simulation sim;
 	sim.init(20'000, 1, 8, -SCREEN_WIDTH/2, -SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
