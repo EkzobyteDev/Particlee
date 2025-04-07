@@ -80,6 +80,29 @@ inline vector2 operator-(vector2 lhs, const vector2& rhs)
 	lhs -= rhs;
 	return lhs;
 }
+inline vector2 operator*(vector2 lhs, const vector2& rhs)
+{
+	lhs.x *= rhs.x;
+	lhs.y *= rhs.y;
+	return lhs;
+}
+inline vector2 operator/(vector2 lhs, const vector2& rhs)
+{
+	lhs.x /= rhs.x;
+	lhs.y /= rhs.y;
+	return lhs;
+}
+
+inline vector2 operator+(vector2 lhs, const float l)
+{
+	lhs.x += l;
+	lhs.y += l;
+	return lhs;
+}
+inline vector2 operator-(vector2 lhs, const float l)
+{
+	return lhs + (-l);
+}
 inline vector2 operator*(vector2 lhs, const float l)
 {
 	lhs *= l;
@@ -87,6 +110,5 @@ inline vector2 operator*(vector2 lhs, const float l)
 }
 inline vector2 operator/(vector2 lhs, const float l)
 {
-	lhs /= l;
-	return lhs;
+	return lhs * (1/l);
 }

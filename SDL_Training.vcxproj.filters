@@ -33,10 +33,10 @@
     <ClCompile Include="simulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="quadTree.cpp">
+    <ClCompile Include="aabb.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="aabb.cpp">
+    <ClCompile Include="planeGrid.cpp">
       <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vector2.cpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="planeGrid.h">
       <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>

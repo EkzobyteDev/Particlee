@@ -107,6 +107,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Ekzobyte\Desktop\OpenCL\include;C:\SDL2-2.26.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,10 +141,11 @@
   <ItemGroup>
     <ClCompile Include="aabb.cpp" />
     <ClCompile Include="core.cpp" />
-    <ClCompile Include="quadTree.cpp" />
+    <ClCompile Include="planeGrid.cpp" />
     <ClCompile Include="simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="planeGrid.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="simulation.h" />
     <ClInclude Include="vector2.cpp" />

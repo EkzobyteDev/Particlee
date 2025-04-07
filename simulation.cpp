@@ -4,20 +4,23 @@
 #include "math.h"
 #include <omp.h>
 
-// x0 y0 - upper left corner
-// x1 y1 - bottom right corner
-void simulation::init(int particlesCount, int particleSize, int quadSize, int x0, int y0, int x1, int y1)
+
+simulation::simulation(simulationInitParams& initParams)
 {
 	srand(time(0));
 
-	particles = std::vector<particle>(particlesCount);
-	activeParticles = std::vector<particle*>(particlesCount);
+	particles = vector<particle>(initParams.particlesCount);
+	activeParticles = std::vector<particle*>(initParams.particlesCount);
+	grid = new planeGrid(initParams.border, initParams.border.size / initParams.quadSize);
 
-	for (int i = 0; i < particlesCount; i++)
+	for (int i = 0; i < initParams.particlesCount; i++)
 	{
 		particles[i] = particle();
+		particles[i].coords.x = lerp(initParams.border.pos.x, initParams.border.pos.x + initParams.border.size.x, rand() / (float)RAND_MAX);
+		particles[i].coords.y = lerp(initParams.border.pos.y, initParams.border.pos.y + initParams.border.size.y, rand() / (float)RAND_MAX);
+		
 		activeParticles[i] = &particles[i];
-		particles[i].coords = vector2(x0 + (rand()%(x1-x0)), y0 + (rand()%(y1-y0)));
+		grid->addParticle(&particles[i]);
 	}
 }
 
@@ -32,10 +35,15 @@ void simulation::simulateFrame(float deltaTime, float time)
 			startCoords->push_back(particle->coords);
 		}
 	}
+
+
 	float r = 500;
-	#pragma	omp parallel for
+	//#pragma	omp parallel for
 	for (int i = 0; i < activeParticles.size(); i++)
 	{
+		vector2 oldCoords = activeParticles[i]->coords;
 		activeParticles[i]->coords = (*startCoords)[i] + vector2::one() * (r * sin(i+time/4));
+
+		grid->updateParticleCell(activeParticles[i], oldCoords);
 	}
 }
