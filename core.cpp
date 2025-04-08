@@ -57,11 +57,11 @@ int main(int argc, char** args)
 	omp_set_num_threads(8);
 	
 	simulationInitParams simInitParams;
-	simInitParams.particlesCount = 100;
+	simInitParams.particlesCount = 5000;
 	simInitParams.particleSize = 1;
 	simInitParams.border.pos = vector2::zero();
 	simInitParams.border.size = vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	simInitParams.quadSize = vector2(8, 8);
+	simInitParams.quadSize = vector2(3, 3);
 
 	simulation sim(simInitParams);
 	SDL_Point* points = new SDL_Point[sim.activeParticles.size()];	
@@ -77,7 +77,7 @@ int main(int argc, char** args)
 		}
 
 		auto t = chrono::high_resolution_clock::now();
-		sim.simulateFrame(deltaTime, SDL_GetTicks64()/1000.0);
+		sim.simulateFrame(deltaTime / 1'000'000.0, SDL_GetTicks64()/1000.0);
 		cout << "Sim time: " << setw(4) << chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - t).count();
 
 		draw(renderer, sim, points);

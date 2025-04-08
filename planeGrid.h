@@ -13,7 +13,7 @@ private:
 	vector<vector<particle*>> grid; // Each cell contains a list of particles
 
 public:
-	planeGrid(aabb borders, vector2 subdivisionsCount);
+	planeGrid(aabb borders, vector2 subdivisionsCount, int maxParticlesInCell);
 
 	vector<particle*>* getCellThatOccuppiesPoint(vector2 point);
 	vector<vector<particle*>*> getCellsByRadius(vector2 point, float radius);

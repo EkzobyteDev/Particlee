@@ -2,12 +2,12 @@
 #include <algorithm>
 
 
-planeGrid::planeGrid(aabb borders, vector2 subdivisionsCount)
+planeGrid::planeGrid(aabb borders, vector2 subdivisionsCount, int maxParticlesInCell)
 {
 	this->borders = borders;
 	this->subdivisionsCount = subdivisionsCount;
 
-	vector<particle*> temp;
+	vector<particle*> temp(maxParticlesInCell);
 	grid.insert(grid.begin(), subdivisionsCount.x * subdivisionsCount.y, temp);
 }
 
@@ -16,7 +16,7 @@ vector<particle*>* planeGrid::getCellThatOccuppiesPoint(vector2 point)
 	if (borders.contains(point) == false) return nullptr;
 	vector2 cellCoords;
 	cellCoords.x = floor((point.x - borders.pos.x) / borders.size.x * subdivisionsCount.x);
-	cellCoords.x = floor((point.y - borders.pos.y) / borders.size.y * subdivisionsCount.y);
+	cellCoords.y = floor((point.y - borders.pos.y) / borders.size.y * subdivisionsCount.y);
 	return &grid[cellCoords.y * subdivisionsCount.y + cellCoords.x];
 }
 
@@ -52,8 +52,21 @@ void planeGrid::updateParticleCell(particle* _particle, vector2 particleOldPos)
 	if (oldCell == nullptr) return;
 	if (oldCell == targetCell) return;
 
-	auto i = std::find(oldCell->begin(), oldCell->end(), _particle);
-	if (i != oldCell->end()) oldCell->erase(i);
+	for (int i = 0; i < oldCell->size(); i++)
+	{
+		if ((*oldCell)[i] == _particle)
+		{
+			(*oldCell)[i] = nullptr;
+			break;
+		}
+	}
 
-	targetCell->push_back(_particle);
+	for (int i = 0; i < targetCell->size(); i++)
+	{
+		if ((*targetCell)[i] == nullptr)
+		{
+			(*targetCell)[i] = _particle;
+			break;
+		}
+	}
 }
