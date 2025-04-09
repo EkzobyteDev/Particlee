@@ -7,7 +7,7 @@ class simulationInitParams
 {
 public:
 	int particlesCount;
-	float particleSize;
+	float particleRadius;
 	vector2 quadSize;
 	aabb border;
 };
@@ -17,6 +17,7 @@ class simulation
 {
 public:
 
+	simulationInitParams params;
 	vector<particle> particles; // A vector of all particles
 	vector<particle*> activeParticles; // A vector of pointers to all active particles (particles that have to be processed)
 	planeGrid* grid;

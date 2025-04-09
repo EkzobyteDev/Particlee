@@ -63,6 +63,8 @@ void planeGrid::updateParticleCell(particle* _particle, vector2 particleOldPos)
 
 	for (int i = 0; i < targetCell->size(); i++)
 	{
+		// If cell is fully loaded, there is no point to add another one particle in it. 
+		// The result of simulation won`t be different
 		if ((*targetCell)[i] == nullptr)
 		{
 			(*targetCell)[i] = _particle;

@@ -57,8 +57,8 @@ int main(int argc, char** args)
 	omp_set_num_threads(8);
 	
 	simulationInitParams simInitParams;
-	simInitParams.particlesCount = 5000;
-	simInitParams.particleSize = 1;
+	simInitParams.particlesCount = 10000;
+	simInitParams.particleRadius = 1;
 	simInitParams.border.pos = vector2::zero();
 	simInitParams.border.size = vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
 	simInitParams.quadSize = vector2(3, 3);

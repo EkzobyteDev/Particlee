@@ -9,4 +9,7 @@ public:
 
 	vector2 coords;
 	vector2 velocity;
+
+	float radius;
+	float mass;
 };
