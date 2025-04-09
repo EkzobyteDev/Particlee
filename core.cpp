@@ -16,23 +16,45 @@ const int SCREEN_WIDTH  = 1920;
 const int SCREEN_HEIGHT = 1080;
 
 using namespace std;
+
+void drawCircle(SDL_Renderer* renderer, vector2 pos, int r)
+{
+	vector<SDL_Point> points;
+	for (int x = pos.x - r; x < pos.x + r + 1; x++)
+	{
+		for (int y = pos.y - r; y < pos.y + r + 1; y++)
+		{
+			vector2 v = (vector2(x,y) - pos);
+			float l = v.length();
+			if ((vector2(x,y) - pos).length() <= r)
+			{
+				SDL_Point p;
+				p.x = x;
+				p.y = y;
+				points.push_back(p);
+			}
+		}
+	}
+	SDL_RenderDrawPoints(renderer, points.data(), points.size());
+}
 void draw(SDL_Renderer* renderer, simulation& sim, SDL_Point* points)
 {
 	auto t = chrono::high_resolution_clock::now();
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-	#pragma omp parallel for
+	//#pragma omp parallel for
 	for (int i = 0; i < sim.activeParticles.size(); i++)
 	{
-		points[i].x = sim.activeParticles[i]->coords.x;
-		points[i].y = sim.activeParticles[i]->coords.y;
+		drawCircle(renderer, sim.activeParticles[i]->coords, sim.activeParticles[i]->radius);
+		//points[i].x = sim.activeParticles[i]->coords.x;
+		//points[i].y = sim.activeParticles[i]->coords.y;
 	}
 
 	cout << "    Set pixels: " << std::setw(4) << chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - t).count();
 	t = chrono::high_resolution_clock::now();
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderDrawPoints(renderer, points, sim.activeParticles.size());
+	//SDL_RenderDrawPoints(renderer, points, sim.activeParticles.size());
 	cout << "    Upload pixels: " << std::setw(4) << chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - t).count();
 }
 
@@ -57,11 +79,11 @@ int main(int argc, char** args)
 	omp_set_num_threads(8);
 	
 	simulationInitParams simInitParams;
-	simInitParams.particlesCount = 10000;
-	simInitParams.particleRadius = 1;
+	simInitParams.particlesCount = 100;
+	simInitParams.particleRadius = 20;
 	simInitParams.border.pos = vector2::zero();
 	simInitParams.border.size = vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-	simInitParams.quadSize = vector2(3, 3);
+	simInitParams.quadSize = vector2(3*simInitParams.particleRadius, 3*simInitParams.particleRadius);
 
 	simulation sim(simInitParams);
 	SDL_Point* points = new SDL_Point[sim.activeParticles.size()];	

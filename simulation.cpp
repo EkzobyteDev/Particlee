@@ -34,32 +34,50 @@ simulation::simulation(simulationInitParams& initParams)
 
 void simulation::simulateFrame(float deltaTime, float time)
 {
-	#pragma omp parallel for
-	for (int i = 0; i < activeParticles.size(); i++)
+	for (particle* p : activeParticles)
 	{
-		particle* _particle = activeParticles[i];
-		_particle->coordsOld = _particle->coords;
-		_particle->velocityOld = _particle->velocity;
-
-		vector<vector<particle*>*> cells = grid->getCellsByRadius(_particle->coordsOld, _particle->radius);
-		for (auto cell : cells)
-		{
-			for (particle* other : *cell)
-			{
-				if (other == nullptr) continue;
-				if ((other->coords - _particle->coords).sqrlen() > (_particle->radius + other->radius) * (_particle->radius + other->radius)) continue;
-
-				if (_particle->mass == other->mass) 
-					_particle->velocity = other->velocityOld;
-				else 
-					_particle->velocity = (2 * other->mass * other->velocityOld + _particle->velocity * (_particle->mass - other->mass)) / (_particle->mass + other->mass);
-			}
-		}
-
-		_particle->coords += _particle->velocity * deltaTime;
-		_particle->coords.x = clamp(_particle->coords.x, params.border.pos.x, params.border.pos.x + params.border.size.x);
-		_particle->coords.y = clamp(_particle->coords.y, params.border.pos.y, params.border.pos.y + params.border.size.y);
+		p->velocityOld = p->velocity;
 	}
+	for (particle* _particle : activeParticles)
+	{
+		for (particle* other : activeParticles)
+		{
+			if (other == nullptr || other == _particle) continue;
+			if ((other->coords - _particle->coords).length() > (_particle->radius + other->radius)) continue;
+
+			_particle->velocity = other->velocityOld;
+		}
+	}
+	for (particle* p : activeParticles)
+	{
+		p->coords += p->velocity * deltaTime;
+	}
+	//#pragma omp parallel for
+	//for (int i = 0; i < activeParticles.size(); i++)
+	//{
+	//	particle* _particle = activeParticles[i];
+	//	_particle->coordsOld = _particle->coords;
+	//	//_particle->velocityOld = _particle->velocity;
+
+	//	vector<vector<particle*>*> cells = grid->getCellsByRadius(_particle->coordsOld, _particle->radius);
+	//	for (auto cell : cells)
+	//	{
+	//		for (particle* other : *cell)
+	//		{
+	//			if (other == nullptr || other == _particle) continue;
+	//			if ((other->coords - _particle->coords).sqrlen() > (_particle->radius + other->radius) * (_particle->radius + other->radius)) continue;
+
+	//			_particle->velocity = other->velocityOld;
+	//			/*if (_particle->mass == other->mass) 
+	//			else 
+	//				_particle->velocity = (2 * other->mass * other->velocityOld + _particle->velocity * (_particle->mass - other->mass)) / (_particle->mass + other->mass);*/
+	//		}
+	//	}
+
+	//	_particle->coords += _particle->velocity * deltaTime;
+	//	_particle->coords.x = clamp(_particle->coords.x, params.border.pos.x, params.border.pos.x + params.border.size.x);
+	//	_particle->coords.y = clamp(_particle->coords.y, params.border.pos.y, params.border.pos.y + params.border.size.y);
+	//}
 
 	#pragma omp parallel for
 	for (int i = 0; i < activeParticles.size(); i++)
